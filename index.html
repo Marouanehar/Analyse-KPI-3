@@ -3,165 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blueberry Strategic Audit - V6</title>
+    <title>Blueberry Intelligence V7 - Système Robuste</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f1f5f9; }
         .sidebar { background: #0f172a; width: 280px; flex-shrink: 0; }
-        .nav-link { color: #94a3b8; padding: 12px 16px; border-radius: 12px; display: flex; align-items: center; gap: 12px; font-size: 13px; transition: all 0.2s; }
+        .nav-link { color: #94a3b8; padding: 12px 16px; border-radius: 12px; display: flex; align-items: center; gap: 12px; font-size: 13px; transition: all 0.2s; border: none; background: transparent; cursor: pointer; text-align: left; }
         .nav-link:hover { background: #1e293b; color: white; }
         .nav-link.active { background: #2563eb; color: white; font-weight: 700; }
         .card { background: white; border-radius: 24px; border: 1px solid #e2e8f0; padding: 24px; }
-        .kpi-val { font-size: 24px; font-weight: 800; color: #1e293b; }
-        .elasticity-high { color: #ef4444; } /* Fragile */
-        .elasticity-low { color: #10b981; }  /* Robuste */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #2563eb; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="flex min-h-screen">
 
-    <div id="importScreen" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-4">
-        <div class="bg-white p-10 rounded-[40px] shadow-2xl max-w-2xl w-full">
+    <div id="importModal" class="fixed inset-0 z-[100] bg-slate-900 flex items-center justify-center p-6 overflow-y-auto">
+        <div class="bg-white p-12 rounded-[48px] shadow-2xl max-w-4xl w-full my-auto">
             <div class="text-center mb-10">
-                <div class="text-5xl mb-4">💎</div>
-                <h2 class="text-3xl font-black text-slate-900 uppercase italic">Blueberry Strategic IQ</h2>
-                <p class="text-slate-500">Analyses avancées de Portefeuille & Élasticité</p>
+                <div class="bg-blue-50 w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-4 text-4xl shadow-inner">🫐</div>
+                <h2 class="text-4xl font-black text-slate-900 tracking-tighter uppercase italic">Blueberry Suite V7</h2>
+                <p class="text-slate-400 font-medium">Contrôle de Gestion consolidé - Version Corrigée</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <div class="p-4 border rounded-2xl bg-slate-50">
-                    <label class="block text-[10px] font-black uppercase text-slate-400 mb-2">Ventes</label>
-                    <input type="file" id="f25" class="text-xs mb-2 block">
-                    <input type="file" id="f26" class="text-xs block">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                <div class="p-6 border rounded-[32px] bg-slate-50 shadow-sm">
+                    <label class="block text-[11px] font-black uppercase text-slate-400 mb-4 tracking-widest">Données de Ventes</label>
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-500 uppercase">Fichier Janv 2025</span>
+                            <input type="file" id="f25" class="mt-1 block w-full text-xs">
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-500 uppercase">Fichier Janv 2026</span>
+                            <input type="file" id="f26" class="mt-1 block w-full text-xs">
+                        </div>
+                    </div>
                 </div>
-                <div class="p-4 border rounded-2xl bg-blue-50">
-                    <label class="block text-[10px] font-black uppercase text-blue-400 mb-2">Référentiels</label>
-                    <input type="file" id="fMap" multiple class="text-xs mb-2 block">
-                    <input type="file" id="fSub" class="text-xs block">
+                <div class="p-6 border rounded-[32px] bg-blue-50 shadow-sm border-blue-100">
+                    <label class="block text-[11px] font-black uppercase text-blue-500 mb-4 tracking-widest">Fichiers de Référence</label>
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-[10px] font-bold text-blue-400 uppercase">Base Familles (Sélectionnez les 3)</span>
+                            <input type="file" id="fMap" multiple class="mt-1 block w-full text-xs">
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-bold text-blue-400 uppercase">Fichier Remplacer (.xlsx)</span>
+                            <input type="file" id="fReplace" class="mt-1 block w-full text-xs">
+                        </div>
+                    </div>
                 </div>
             </div>
-            <button onclick="bootApp()" id="btnBoot" class="w-full bg-blue-600 text-white font-black py-4 rounded-2xl hover:bg-blue-700 shadow-xl uppercase tracking-widest transition">Lancer l'Audit Stratégique</button>
+            
+            <button onclick="startApp()" id="btnStart" class="w-full bg-blue-600 text-white font-black py-5 rounded-[24px] hover:bg-blue-700 transition transform active:scale-95 shadow-xl text-lg uppercase tracking-widest">Lancer l'Analyse</button>
+            <div id="statusInfo" class="mt-4 text-center text-xs font-bold text-red-500 hidden">Traitement en cours...</div>
         </div>
     </div>
 
     <div id="mainUI" class="hidden flex w-full">
         <aside class="sidebar p-6 flex flex-col h-screen sticky top-0">
-            <div class="flex items-center gap-3 mb-10">
+            <div class="flex items-center gap-3 mb-10 px-2">
                 <span class="text-2xl">🫐</span>
-                <span class="text-white font-black uppercase tracking-tighter">Strategic Control</span>
+                <span class="text-white font-black uppercase tracking-widest italic text-xs">Blueberry IQ</span>
             </div>
             <nav class="flex-1 space-y-1">
-                <button onclick="showPage('growth')" class="nav-link active w-full" id="n-growth">📈 Contribution Croissance</button>
-                <button onclick="showPage('elasticity')" class="nav-link w-full" id="n-elasticity">🎯 Élasticité Prix</button>
-                <button onclick="showPage('innovation')" class="nav-link w-full" id="n-innovation">🆕 Churn & Innovation</button>
-                <button onclick="showPage('risk')" class="nav-link w-full" id="n-risk">🛡️ Concentration Risque</button>
-                <button onclick="showPage('aup')" class="nav-link w-full" id="n-aup">💰 Audit des Prix (AUP)</button>
-                <button onclick="showPage('anomalies')" class="nav-link w-full" id="n-anomalies">🚨 Anomalies Opérat.</button>
+                <button onclick="nav('overview')" id="btn-overview" class="nav-link active w-full">🏠 Synthèse Globale</button>
+                <button onclick="nav('variance')" id="btn-variance" class="nav-link w-full">📊 Variance Prix/Vol</button>
+                <button onclick="nav('families')" id="btn-families" class="nav-link w-full">👨‍🍳 Performance Familles</button>
+                <button onclick="nav('pareto')" id="btn-pareto" class="nav-link w-full text-emerald-400">💹 Pareto ABC</button>
+                <button onclick="nav('export')" id="btn-export" class="nav-link w-full text-blue-400">💾 Export Excel</button>
             </nav>
-            <button onclick="exportFullAudit()" class="mt-4 bg-emerald-600 text-white p-3 rounded-xl text-[10px] font-black uppercase">💾 Export Budgétaire</button>
-            <button onclick="location.reload()" class="mt-2 text-slate-500 text-[10px] uppercase font-bold text-center">🔄 Reset</button>
+            <button onclick="location.reload()" class="mt-6 p-4 text-[10px] font-black text-slate-500 hover:text-red-400 transition uppercase tracking-widest">🔄 Recharger Fichiers</button>
         </aside>
 
         <main class="flex-1 flex flex-col h-screen overflow-hidden">
             <header class="h-20 bg-white border-b flex items-center justify-between px-10">
-                <h2 id="pageTitle" class="font-black text-slate-800 uppercase">Contribution à la Croissance</h2>
-                <div class="flex items-center gap-4">
-                    <select id="siteSelector" onchange="refreshCalculations()" class="bg-slate-100 border-none rounded-xl px-4 py-2 text-[10px] font-black uppercase outline-none">
-                        <option value="GLOBAL">🌏 Entreprise</option>
-                        <option value="RABAT">Rabat Centre</option>
-                        <option value="MOHAMMEDIA">Mohammedia</option>
-                        <option value="MEGA MALL">Mega Mall</option>
-                        <option value="ARRIBAT CENTER">Arribat Center</option>
-                        <option value="CASA">Casablanca</option>
-                    </select>
-                </div>
+                <h2 id="pageTitle" class="font-black text-slate-800 uppercase text-sm tracking-widest">Synthèse Globale</h2>
+                <select id="siteFilter" onchange="applyFilters()" class="bg-slate-100 border-none rounded-xl px-4 py-2 text-[10px] font-black uppercase text-slate-600 outline-none">
+                    <option value="GLOBAL">🌏 Vue Entreprise</option>
+                    <option value="RABAT">📍 Rabat</option>
+                    <option value="MOHAMMEDIA">📍 Mohammedia</option>
+                    <option value="MEGA MALL">📍 Mega Mall</option>
+                    <option value="ARRIBAT CENTER">📍 Arribat Center</option>
+                    <option value="CASA">📍 Casablanca</option>
+                </select>
             </header>
 
-            <section class="flex-1 overflow-y-auto p-10 bg-slate-50">
-                
-                <div id="p-growth" class="page-content space-y-8">
-                    <div class="bg-white p-8 rounded-[40px] border shadow-sm h-[450px]">
-                        <h3 class="text-xs font-black uppercase text-slate-400 mb-6">Top 10 Contributeurs à la croissance globale (Points de %)</h3>
-                        <canvas id="chartContribution"></canvas>
-                    </div>
-                    <div class="card overflow-hidden p-0">
-                        <table class="w-full text-left">
-                            <thead class="bg-slate-100 border-b text-[10px] font-black uppercase">
-                                <tr><th class="p-4">Article</th><th class="p-4">Famille</th><th class="p-4 text-right">Evo CA</th><th class="p-4 text-right text-blue-600">Contrib. Croissance</th></tr>
-                            </thead>
-                            <tbody id="growthTable" class="text-sm"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div id="p-elasticity" class="page-content hidden space-y-8">
+            <section class="flex-1 overflow-y-auto p-10 space-y-10 custom-scroll">
+                <div id="p-overview" class="page-sec space-y-8">
+                    <div id="ov-kpis" class="grid grid-cols-1 md:grid-cols-4 gap-6"></div>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div class="card">
-                            <h3 class="font-bold text-slate-800 mb-4">Légende Stratégique</h3>
-                            <div class="space-y-3 text-xs">
-                                <p>🟢 <b>Inélastique (0 à -1) :</b> Vous pouvez augmenter les prix, le volume résiste. Produit fort.</p>
-                                <p>🔴 <b>Élastique (< -1) :</b> La hausse de prix a fait chuter lourdement le volume. Risque élevé.</p>
-                                <p>🔵 <b>Veblen (> 0) :</b> Paradoxe. Le prix monte et le volume monte aussi (Effet de mode).</p>
-                            </div>
-                        </div>
-                        <div class="card bg-blue-900 text-white">
-                            <p class="text-[10px] font-black uppercase text-blue-300">Article le plus sensible au prix</p>
-                            <p id="topElasticity" class="text-2xl font-black mt-2">-</p>
-                        </div>
-                    </div>
-                    <div class="card h-[500px]"><canvas id="chartElasticity"></canvas></div>
-                </div>
-
-                <div id="p-innovation" class="page-content hidden space-y-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="card border-l-8 border-emerald-500">
-                            <h4 class="text-xs font-black uppercase text-slate-400 mb-4">Nouveautés 2026 (CA généré)</h4>
-                            <div id="newList" class="space-y-2"></div>
-                        </div>
-                        <div class="card border-l-8 border-red-500">
-                            <h4 class="text-xs font-black uppercase text-slate-400 mb-4">Ventes Perdues (Articles 2025 disparus)</h4>
-                            <div id="lostList" class="space-y-2"></div>
-                        </div>
+                        <div class="card h-[400px]"><canvas id="chartOvEvo"></canvas></div>
+                        <div class="card h-[400px]"><canvas id="chartOvSites"></canvas></div>
                     </div>
                 </div>
 
-                <div id="p-risk" class="page-content hidden space-y-8 text-center">
-                    <div class="max-w-md mx-auto">
-                        <h3 class="text-xs font-black uppercase text-slate-400 mb-6">Indice de Concentration HHI</h3>
-                        <div class="card p-10">
-                            <div id="hhiScore" class="text-6xl font-black mb-4">0</div>
-                            <p id="hhiStatus" class="font-bold uppercase text-sm"></p>
-                        </div>
-                    </div>
-                    <div class="card p-8 h-[400px]"><canvas id="chartHHI"></canvas></div>
+                <div id="p-variance" class="page-sec hidden space-y-8">
+                    <div class="card h-[500px]"><canvas id="chartVar"></canvas></div>
                 </div>
 
-                <div id="p-aup" class="page-content hidden">
-                    <div class="card overflow-hidden p-0">
-                        <table class="w-full text-left">
-                            <thead class="bg-slate-100 text-[10px] font-black uppercase">
-                                <tr><th class="p-4">Famille</th><th class="p-4 text-right">Prix Moyen 2025</th><th class="p-4 text-right">Prix Moyen 2026</th><th class="p-4 text-center">Variation</th></tr>
-                            </thead>
-                            <tbody id="aupTable" class="text-sm"></tbody>
-                        </table>
-                    </div>
+                <div id="p-families" class="page-sec hidden card overflow-hidden p-0">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 border-b text-[10px] font-black text-slate-400 uppercase">
+                            <tr><th class="p-6">Famille</th><th class="p-6 text-right">CA 2025</th><th class="p-6 text-right">CA 2026</th><th class="p-6 text-center">Evo %</th></tr>
+                        </thead>
+                        <tbody id="famTable" class="text-sm font-semibold divide-y"></tbody>
+                    </table>
                 </div>
 
+                <div id="p-pareto" class="page-sec hidden card overflow-hidden p-0">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-50 border-b text-[10px] font-black text-slate-400 uppercase">
+                            <tr><th class="p-4">Classe</th><th class="p-4">Article</th><th class="p-4 text-right">CA 2026</th><th class="p-4 text-right">Part %</th></tr>
+                        </thead>
+                        <tbody id="paretoTable" class="text-sm font-semibold divide-y"></tbody>
+                    </table>
+                </div>
+
+                <div id="p-export" class="page-sec hidden flex items-center justify-center h-64 text-center">
+                    <button onclick="exportConsolidated()" class="bg-emerald-600 text-white font-black px-10 py-5 rounded-3xl hover:bg-emerald-700 shadow-xl uppercase tracking-widest">Générer l'Audit Final (Excel)</button>
+                </div>
             </section>
         </main>
     </div>
 
     <script>
-        let db25=[], db26=[], mapFam={}, mapSub={};
-        let masterData = [];
-        let activeCharts = [];
+        let db25 = [], db26 = [], mapFam = {}, mapSub = {};
+        let filteredArticles = [];
+        let charts = [];
 
-        // --- CORE LOGIC ---
-        function getSiteName(nom) {
-            const n = (nom || "").toUpperCase();
+        // Helper de nettoyage des données
+        const cleanVal = (v) => {
+            if (!v) return 0;
+            if (typeof v === 'number') return v;
+            return parseFloat(v.toString().replace(/\s/g, '').replace(',', '.')) || 0;
+        };
+
+        const getSafeKey = (obj, key) => {
+            const keys = Object.keys(obj);
+            const found = keys.find(k => k.trim().toLowerCase() === key.toLowerCase());
+            return found ? obj[found] : null;
+        };
+
+        function getSite(name) {
+            const n = (name || "").toUpperCase();
             if (n.includes("MOHAMMEDIA")) return "MOHAMMEDIA";
             if (n.includes("MEGA MALL") || n.includes("MM ")) return "MEGA MALL";
             if (n.includes("ARRIBAT CENTER")) return "ARRIBAT CENTER";
@@ -169,127 +157,149 @@
             return "RABAT";
         }
 
-        async function bootApp() {
-            const f25 = document.getElementById('f25').files[0];
-            const f26 = document.getElementById('f26').files[0];
-            const fFams = document.getElementById('fMap').files;
-            const fSub = document.getElementById('fSub').files[0];
+        async function startApp() {
+            const status = document.getElementById('statusInfo');
+            status.classList.remove('hidden');
 
-            if(!f25 || !f26 || fFams.length === 0 || !fSub) return alert("Charger tous les fichiers.");
+            try {
+                // 1. Substitutions
+                const fSub = document.getElementById('fReplace').files[0];
+                const subRows = await readExcel(fSub);
+                mapSub = {};
+                subRows.forEach(r => {
+                    const code = getSafeKey(r, 'Code article');
+                    const target = getSafeKey(r, 'Articles a remplacer');
+                    if(code) mapSub[code] = target?.toString().trim().toUpperCase();
+                });
 
-            const [subRows, ...famLists] = await Promise.all([readXls(fSub), ...Array.from(fFams).map(f => readXls(f))]);
+                // 2. Familles
+                const fFams = document.getElementById('fMap').files;
+                mapFam = {};
+                for(let f of fFams) {
+                    const rows = await readExcel(f);
+                    rows.forEach(r => {
+                        const code = getSafeKey(r, 'Code article');
+                        if(code) mapFam[code] = getSafeKey(r, 'Famille') || 'AUTRES';
+                    });
+                }
 
-            mapSub = {}; subRows.forEach(r => { if(r['Code article']) mapSub[r['Code article']] = r['Articles a remplacer']?.trim().toUpperCase(); });
-            mapFam = {}; famLists.flat().forEach(r => { if(r['Code article']) mapFam[r['Code article']] = r['Famille'] || 'AUTRES'; });
+                // 3. Ventes
+                const f25 = document.getElementById('f25').files[0];
+                const f26 = document.getElementById('f26').files[0];
+                
+                const raw25 = await readExcel(f25);
+                const raw26 = await readExcel(f26);
 
-            const process = (data, yr) => data.map(r => ({
-                name: mapSub[r['Code article']] || (r['Nom Code article'] || "").toUpperCase(),
-                site: getSiteName(r['Nom Site']),
-                ca: parseFloat(r['CA HT']) || 0,
-                qt: parseFloat(r['QT']) || 0,
-                yr: yr
-            }));
+                const process = (data) => data.map(r => ({
+                    code: getSafeKey(r, 'Code article'),
+                    name: mapSub[getSafeKey(r, 'Code article')] || getSafeKey(r, 'Nom Code article')?.toUpperCase() || "SANS NOM",
+                    site: getSite(getSafeKey(r, 'Nom Site')),
+                    isChariot: (getSafeKey(r, 'Nom Site') || "").toUpperCase().includes("CHARIOT"),
+                    ca: cleanVal(getSafeKey(r, 'CA HT')),
+                    qt: cleanVal(getSafeKey(r, 'QT'))
+                }));
 
-            db25 = process(await readXls(f25), 2025);
-            db26 = process(await readXls(f26), 2026);
+                db25 = process(raw25);
+                db26 = process(raw26);
 
-            refreshCalculations();
-            document.getElementById('importScreen').classList.add('hidden');
-            document.getElementById('mainUI').classList.remove('hidden');
+                applyFilters();
+                document.getElementById('importModal').classList.add('hidden');
+                document.getElementById('mainUI').classList.remove('hidden');
+            } catch (e) {
+                alert("Erreur lors de la lecture des fichiers. Vérifiez les formats.");
+                console.error(e);
+            }
         }
 
-        function refreshCalculations() {
-            const site = document.getElementById('siteSelector').value;
-            const d25 = site === "GLOBAL" ? db25 : db25.filter(r => r.site === site);
-            const d26 = site === "GLOBAL" ? db26 : db26.filter(r => r.site === site);
+        function applyFilters() {
+            const site = document.getElementById('siteFilter').value;
+            const data25 = site === "GLOBAL" ? db25 : db25.filter(r => r.site === site);
+            const data26 = site === "GLOBAL" ? db26 : db26.filter(r => r.site === site);
 
-            const artMap = {};
-            const agg = (data, key) => data.forEach(r => {
-                if(!artMap[r.name]) artMap[r.name] = { name:r.name, ca25:0, qt25:0, ca26:0, qt26:0 };
-                artMap[r.name][key+'ca'] += r.ca; artMap[r.name][key+'qt'] += r.qt;
-            });
-            agg(d25, '25'); agg(d26, '26');
+            const map = {};
+            const aggregate = (data, yr) => {
+                data.forEach(r => {
+                    if(!map[r.name]) map[r.name] = { name: r.name, ca25:0, qt25:0, ca26:0, qt26:0, isChariot: r.isChariot, fam: mapFam[r.code] || 'AUTRES' };
+                    map[r.name][yr === 25 ? 'ca25' : 'ca26'] += r.ca;
+                    map[r.name][yr === 25 ? 'qt25' : 'qt26'] += r.qt;
+                });
+            };
+            aggregate(data25, 25); aggregate(data26, 26);
 
-            const totalCA25 = d25.reduce((a,b)=>a+b.ca, 0);
-            
-            masterData = Object.values(artMap).map(i => {
-                const p25 = i.qt25 > 0 ? i.ca25 / i.qt25 : 0;
-                const p26 = i.qt26 > 0 ? i.ca26 / i.qt26 : 0;
-                const dP = p25 > 0 ? (p26 - p25)/p25 : 0;
-                const dQ = i.qt25 > 0 ? (i.qt26 - i.qt25)/i.qt25 : 0;
-                
-                return {
-                    ...i,
-                    fam: Object.values(db26).find(x=>x.name === i.name)?.name ? (mapFam[Object.values(db26).find(x=>x.name === i.name)?.code] || 'AUTRES') : 'AUTRES',
-                    contrib: totalCA25 > 0 ? ((i.ca26 - i.ca25) / totalCA25 * 100) : 0,
-                    elasticity: dP !== 0 ? (dQ / dP) : 0,
-                    priceVar: dP * 100
-                };
+            filteredArticles = Object.values(map).map(i => {
+                const p25 = i.qt25 > 0 ? i.ca25/i.qt25 : 0;
+                const p26 = i.qt26 > 0 ? i.ca26/i.qt26 : 0;
+                return { ...i, evoAbs: i.ca26-i.ca25, pEff: (p26-p25)*i.qt26, vEff: (i.qt26-i.qt25)*p25 };
             });
 
             renderAll();
         }
 
         function renderAll() {
-            activeCharts.forEach(c => c.destroy());
-            activeCharts = [];
-
-            // 1. Contribution Table & Chart
-            const topContrib = [...masterData].sort((a,b)=>Math.abs(b.contrib)-Math.abs(a.contrib)).slice(0, 10);
-            document.getElementById('growthTable').innerHTML = topContrib.map(i => `
-                <tr class="border-b">
-                    <td class="p-4 font-bold text-slate-700">${i.name}</td>
-                    <td class="p-4 text-xs text-slate-400">${i.fam}</td>
-                    <td class="p-4 text-right">${fmt(i.ca26-i.ca25)}</td>
-                    <td class="p-4 text-right font-black text-blue-600">${i.contrib.toFixed(2)} pts</td>
-                </tr>`).join('');
+            charts.forEach(c => c.destroy()); charts = [];
             
-            activeCharts.push(new Chart(document.getElementById('chartContribution'), {
-                type: 'bar', data: { labels: topContrib.map(i=>i.name.substring(0,12)), datasets: [{ label:'Contribution (pts)', data: topContrib.map(i=>i.contrib), backgroundColor:'#3b82f6' }] }
-            }));
+            const ca25 = filteredArticles.reduce((a,b)=>a+b.ca25, 0);
+            const ca26 = filteredArticles.reduce((a,b)=>a+b.ca26, 0);
+            const evo = ca25 > 0 ? ((ca26-ca25)/ca25*100) : 0;
 
-            // 2. Elasticity Chart
-            const elData = masterData.filter(i => Math.abs(i.priceVar) > 2 && Math.abs(i.elasticity) < 10);
-            activeCharts.push(new Chart(document.getElementById('chartElasticity'), {
-                type: 'scatter',
-                data: {
-                    datasets: [{
-                        label: 'Élasticité Articles',
-                        data: elData.map(i => ({ x: i.priceVar, y: i.elasticity })),
-                        backgroundColor: '#6366f1'
-                    }]
-                },
-                options: { scales: { x: { title: { display:true, text:'Variation Prix (%)' } }, y: { title: { display:true, text:'Élasticité' } } } }
-            }));
+            document.getElementById('ov-kpis').innerHTML = `
+                <div class="card"><p class="text-[10px] font-black text-slate-400 uppercase">CA 2026</p><p class="text-2xl font-black">${fmt(ca26)}</p></div>
+                <div class="card"><p class="text-[10px] font-black text-slate-400 uppercase">Evolution</p><p class="text-2xl font-black ${evo>=0?'text-emerald-500':'text-red-500'}">${evo.toFixed(1)}%</p></div>
+                <div class="card"><p class="text-[10px] font-black text-slate-400 uppercase">Volume 2026</p><p class="text-2xl font-black text-blue-600">${Math.round(filteredArticles.reduce((a,b)=>a+b.qt26,0))}</p></div>
+                <div class="card"><p class="text-[10px] font-black text-slate-400 uppercase">Articles</p><p class="text-2xl font-black">${filteredArticles.filter(i=>i.ca26>0).length}</p></div>
+            `;
 
-            // 3. Innovation
-            const nouveaux = masterData.filter(i => i.ca25 === 0 && i.ca26 > 0).sort((a,b)=>b.ca26-a.ca26).slice(0, 10);
-            const perdus = masterData.filter(i => i.ca26 === 0 && i.ca25 > 0).sort((a,b)=>b.ca25-a.ca25).slice(0, 10);
-            document.getElementById('newList').innerHTML = nouveaux.map(i => `<div class="flex justify-between text-xs p-2 bg-slate-50 rounded"><span>${i.name}</span><span class="font-bold text-emerald-600">${fmt(i.ca26)}</span></div>`).join('');
-            document.getElementById('lostList').innerHTML = perdus.map(i => `<div class="flex justify-between text-xs p-2 bg-slate-50 rounded"><span>${i.name}</span><span class="font-bold text-red-600">${fmt(i.ca25)}</span></div>`).join('');
+            // Charts
+            charts.push(new Chart(document.getElementById('chartOvEvo'), { type:'bar', data: { labels:['2025','2026'], datasets:[{ data:[ca25,ca26], backgroundColor:['#cbd5e1','#2563eb'] }] }, options:{maintainAspectRatio:false} }));
+            
+            const sitesAgg = {};
+            db26.forEach(r => sitesAgg[r.site] = (sitesAgg[r.site] || 0) + r.ca);
+            charts.push(new Chart(document.getElementById('chartOvSites'), { type:'doughnut', data:{ labels:Object.keys(sitesAgg), datasets:[{data:Object.values(sitesAgg), backgroundColor:['#0f172a','#2563eb','#6366f1','#94a3b8','#cbd5e1']}] }, options:{maintainAspectRatio:false} }));
 
-            // 4. HHI
-            const totalCA = masterData.reduce((a,b)=>a+b.ca26, 0);
-            const hhi = masterData.reduce((a,b)=> a + Math.pow((b.ca26/totalCA)*100, 2), 0);
-            document.getElementById('hhiScore').innerText = Math.round(hhi);
-            document.getElementById('hhiStatus').innerText = hhi < 1500 ? "Portefeuille Diversifié (Sain)" : "Portefeuille Concentré (Risqué)";
-            document.getElementById('hhiStatus').className = hhi < 1500 ? "text-emerald-500 font-bold" : "text-red-500 font-bold";
+            // Variance
+            const topVar = [...filteredArticles].sort((a,b)=>Math.abs(b.evoAbs)-Math.abs(a.evoAbs)).slice(0, 10);
+            charts.push(new Chart(document.getElementById('chartVar'), { type:'bar', data:{ labels:topVar.map(i=>i.name.slice(0,12)), datasets:[{label:'Effet Prix', data:topVar.map(i=>i.pEff), backgroundColor:'#6366f1'},{label:'Effet Volume', data:topVar.map(i=>i.vEff), backgroundColor:'#10b981'}] }, options:{maintainAspectRatio:false, scales:{x:{stacked:true},y:{stacked:true}}} }));
+
+            // Tables
+            const fams = {};
+            filteredArticles.forEach(i => {
+                const k = i.isChariot ? "TOTAL CHARIOT" : i.fam;
+                if(!fams[k]) fams[k] = {ca25:0, ca26:0};
+                fams[k].ca25 += i.ca25; fams[k].ca26 += i.ca26;
+            });
+            document.getElementById('famTable').innerHTML = Object.entries(fams).sort((a,b)=>b[1].ca26-a[1].ca26).map(([n,d]) => `
+                <tr class="${n==='TOTAL CHARIOT'?'bg-orange-50':''}">
+                    <td class="p-5 uppercase text-[10px] font-black">${n}</td>
+                    <td class="p-5 text-right">${fmt(d.ca25)}</td>
+                    <td class="p-5 text-right font-black text-blue-600">${fmt(d.ca26)}</td>
+                    <td class="p-5 text-center font-black ${d.ca26>=d.ca25?'text-emerald-500':'text-red-500'}">${d.ca25>0?((d.ca26-d.ca25)/d.ca25*100).toFixed(1)+'%':'-'}</td>
+                </tr>`).join('');
+
+            const sorted = [...filteredArticles].sort((a,b)=>b.ca26-a.ca26);
+            let cum = 0;
+            document.getElementById('paretoTable').innerHTML = sorted.slice(0,50).map(i => {
+                cum += i.ca26; const pct = (i.ca26/ca26*100);
+                return `<tr>
+                    <td class="p-4"><span class="px-2 py-1 rounded text-[9px] font-black ${cum/ca26<=0.8?'bg-emerald-100 text-emerald-700':'bg-slate-100'}">${cum/ca26<=0.8?'A':'B/C'}</span></td>
+                    <td class="p-4 uppercase text-[10px]">${i.name}</td>
+                    <td class="p-4 text-right font-mono">${fmt(i.ca26)}</td>
+                    <td class="p-4 text-right font-bold">${pct.toFixed(1)}%</td>
+                </tr>`;
+            }).join('');
         }
 
-        // HELPERS
-        async function readXls(f) { const d = await f.arrayBuffer(); const wb = XLSX.read(new Uint8Array(d), {type:'array'}); return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]); }
+        async function readExcel(file) {
+            if (!file) return [];
+            const d = await file.arrayBuffer();
+            const wb = XLSX.read(new Uint8Array(d), {type:'array'});
+            return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]);
+        }
         function fmt(n) { return Math.round(n).toLocaleString('fr-MA') + " DH"; }
-        function showPage(p) {
-            document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
-            document.getElementById('p-'+p).classList.remove('hidden');
-            document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
-            document.getElementById('n-'+p).classList.add('active');
-            document.getElementById('pageTitle').innerText = document.getElementById('n-'+p).innerText.substring(3);
-        }
-        function exportFullAudit() {
-            const ws = XLSX.utils.json_to_sheet(masterData.map(i => ({ Article: i.name, "Contrib. Croissance": i.contrib.toFixed(2), "Elasticité": i.elasticity.toFixed(2), "Innovation": i.ca25===0?"OUI":"NON" })));
-            const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Strategic_Audit");
-            XLSX.writeFile(wb, "Blueberry_Strategic_Audit_V6.xlsx");
+        function nav(p) { document.querySelectorAll('.page-sec').forEach(el=>el.classList.add('hidden')); document.getElementById('p-'+p).classList.remove('hidden'); document.querySelectorAll('.nav-link').forEach(b=>b.classList.remove('active')); document.getElementById('btn-'+p).classList.add('active'); }
+        function exportConsolidated() {
+            const ws = XLSX.utils.json_to_sheet(filteredArticles.map(a => ({ Article: a.name, Famille: a.fam, "CA 2025": a.ca25, "CA 2026": a.ca26, "Effet Prix": a.pEff, "Effet Volume": a.vEff })));
+            const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Audit");
+            XLSX.writeFile(wb, "Blueberry_Audit_V7.xlsx");
         }
     </script>
 </body>
